@@ -21,47 +21,61 @@ class ViewController: UIViewController {
     
     @IBAction func tipSliderMoved(_ sender: AnyObject) {
         
+        //get Slider value
         tipPercent.text = "\(Int(tipSlider.value.rounded()) * 5) %"
         updateLabels()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        //keyboard always visible
         billAmount.becomeFirstResponder()
+        
+        //when bill amount changed
         billAmount.addTarget(self, action: #selector(updateBill(_:)), for: .editingChanged)
         updateLabels()
     }
     
+    //function executes when bill amount changed
     func updateBill(_ billAmount: UITextField) {
         updateLabels()
     }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func billChanged(_ sender: AnyObject) {
-        updateLabels()
-    }
-    
+    //calculate and update the values, labels
     func updateLabels(){
+        
+        //get bill value from previous session
+        let defaultVal = UserDefaults.standard
+        if(defaultVal.object(forKey: "prevBill") != nil){
+            let val = defaultVal.object(forKey: "prevTime")!
+            if (NSDate().timeIntervalSinceReferenceDate - (val as AnyObject).timeIntervalSinceReferenceDate < 60 * 10){
+                billAmount.text = defaultVal.object(forKey: "prevBill") as! String!
+            }
+        }
         if billAmount.text == ""{
             bill = 0.0
             tipP = 0.0
-            //tipPercent.text = "\(Int(tipSlider.value.rounded()) * 5) %"
         }else{
             bill = Double(billAmount.text!)!
             tipP = Double((tipSlider.value.rounded()) * 5)
-            //tipPercent.text = "\(tipP) %"
         }
-        //
-        //bill = 100.0
-        
         tip = Double((bill * tipP)/100)
         total = Double(bill + tip)
         tipAmount.text = "$ \(tip)"
         totalAmount.text = "$ \(total)"
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        //save the bill and current date
+        let defaultVal = UserDefaults.standard
+        defaultVal.setValue(bill, forKey: "prevBill")
+        defaultVal.setValue(NSDate(), forKey: "prevTime")
     }
 
 }
