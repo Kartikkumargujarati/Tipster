@@ -13,7 +13,7 @@
 
 Here's a walkthrough of implemented user stories:
 
-<img src='https://github.com/kartikkumargujarati/Tipster/Tipster.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://github.com/Kartikkumargujarati/Tipster/blob/master/Tipster.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 ## License
 
